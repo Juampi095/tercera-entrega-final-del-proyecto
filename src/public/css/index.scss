@@ -1,0 +1,529 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poiret+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --brand-color: #f59e0b;
+  --dark-color: #18181b;
+  --mid-color: #a1a1aa;
+  --light-color: #f8f8f8;
+  --first-color: #f59e0b;
+  --second-color: #fabf5a;
+  --bg-light-color: #444444;
+}
+
+body {
+  cursor: default;
+
+  &.light {
+    background: var(--light-color);
+  }
+
+  &.dark {
+    transition: 0.4s ease all;
+    background-color: var(--dark-color);
+  }
+}
+
+//////////////////// NAV ////////////////////
+
+// DARK MODE SWITCH
+
+#toggle {
+  display: none;
+}
+
+.toggle {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 63px;
+  height: 33px;
+  border-radius: 50px;
+  transition: 0.2s;
+
+  i {
+    width: 50%;
+    line-height: 35px;
+    text-align: center;
+    font-size: 20px;
+    z-index: 1;
+  }
+}
+
+.toggle .ball {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  margin: -1px;
+  border-radius: 50%;
+  transition: 0.3s ease-out;
+}
+
+.light .toggle {
+  background: linear-gradient(145deg, #e1e1e1, #fff);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3), -3px -3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.light .toggle .bxs-sun {
+  color: var(--light-color);
+}
+
+.light .toggle .bx-moon {
+  color: var(--dark-color);
+}
+
+.light .toggle .ball {
+  background: var(--dark-color);
+}
+
+.dark .toggle {
+  background: var(--dark-color);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3), -3px -3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.dark .toggle .bx-sun {
+  color: var(--light-color);
+}
+
+.dark .toggle .bxs-moon {
+  color: var(--dark-color);
+}
+
+.dark .toggle .ball {
+  background: #fafafa;
+  transform: translateX(30px);
+}
+
+//////////////////// NAV ////////////////////
+
+nav {
+  background-color: var(--light-color);
+  font-weight: bold;
+  font-size: 3vh;
+  text-decoration: none;
+
+  &.dark {
+    background-color: var(--dark-color);
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--dark-color);
+  }
+}
+
+.horizontal-menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 10%;
+  width: 100%;
+  gap: 10%;
+  font-family: "Poiret One", cursive;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+
+  li {
+    transition: 0.4s ease all;
+    color: var(--light-color);
+    padding: 5px;
+    border-radius: 5px;
+
+    a {
+      padding: 5px;
+    }
+
+    input {
+      display: none;
+    }
+
+    :hover {
+      background-color: var(--brand-color);
+      color: var(--dark-color);
+      text-decoration: underline;
+    }
+  }
+}
+
+.vertical-menu {
+  padding-top: 5px;
+  position: absolute;
+  display: none;
+  min-width: 10vw;
+  background-color: var(--light-color);
+  font-size: 2.5vh;
+  z-index: 3;
+
+  li {
+    :hover {
+      background-color: var(--brand-color);
+      color: var(--dark-color);
+      text-decoration: dotted;
+    }
+  }
+}
+
+.horizontal-menu,
+.vertical-menu {
+  list-style: none;
+}
+
+.horizontal-menu li:hover .vertical-menu {
+  display: block;
+}
+
+.benvenuti {
+  display: flex;
+  width: 20vw;
+  position: relative;
+  padding: 1vh;
+  color: var(--light-color);
+  background-color: var(--dark-color);
+  border: 1px;
+  border-radius: 0 0 5px 0;
+}
+
+//////////////////// PERFIL ////////////////////
+
+.user-card-continer {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+}
+
+.user-card, .user-avatar{
+  background-color: var(--light-color);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.user-avatar {
+  background-color: #ccc;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.user-details {
+  margin: 2rem;
+}
+
+.user-avatar, .user-name, .user-age, .user-email, .user-role{
+  padding-bottom: 0.5rem;
+}
+
+.user-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.user-age,
+.user-role,
+.user-email {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+
+//PRODUCTS
+.products {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  gap: 5%;
+  justify-content: center;
+  padding-top: 5%;
+}
+
+.card {
+  background-color: var(--light-color);
+  box-shadow: 2px 2px 1px 3px;
+  width: 20%;
+  border-radius: 8px;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  transition: all 0.3s ease-in-out;
+  margin: 10px;
+  overflow: hidden;
+
+  img {
+    background-color: var(--light-color);
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+}
+
+.card::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background: #f59e0b80;
+  position: absolute;
+  z-index: 1;
+  left: -500px;
+  transition: 0.3s ease-in-out all;
+}
+
+.card:hover::after {
+  left: 0;
+}
+
+.card-info {
+  margin: 10px;
+  cursor: default;
+  color: var(--dark-color);
+
+  h3 {
+    font-size: 16px;
+  }
+
+  p {
+    display: inline-block;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
+  h4 {
+    margin: 8px 0px;
+  }
+}
+
+.card img,
+.card-info {
+  z-index: 2;
+}
+
+.card-info .item-detail-info {
+  padding: 8px 12px;
+  background-color: rgb(48, 47, 47);
+  border-radius: 0px 0px 8px 8px;
+}
+
+//LOGIN
+
+.login-container,
+.login-form,
+.login-inputs {
+  font-family: "Poppins", sans-serif;
+  display: grid;
+}
+
+.login-container {
+  background: url(../assets/img/puntitos-negros-soft.png);
+
+  &.dark {
+    background: url(../assets/img/puntitos-blancos-soft.png);
+  }
+
+  position: relative;
+  height: 100vh;
+  align-items: center;
+}
+
+.login-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  min-width: 20%;
+  position: relative;
+  background-color: rgb(255, 255, 255, 0.5);
+  row-gap: 1.25rem;
+  backdrop-filter: blur(20px);
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 2px solid var(--dark-color);
+
+  &:hover {
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
+    transform: translateY(-5px) translateX(-5px);
+  }
+
+  &.dark {
+    background-color: var(--dark-color);
+    border: 1px solid var(--light-color);
+
+    &:hover {
+      box-shadow: 5px 5px 0px var(--light-color);
+    }
+  }
+}
+
+.login-form,
+.login-button,
+.login-button-ghost {
+  transition: all 0.4s ease;
+}
+
+.login-title {
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+
+  &.dark {
+    color: var(--light-color);
+  }
+}
+
+.login-inputs {
+  row-gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.login-label {
+  display: block;
+  color: var(--dark-color);
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+
+  &.dark {
+    color: var(--light-color);
+  }
+}
+
+.login-input {
+  padding: 14px 12px;
+  border-radius: 6px;
+  background-color: hsla(244, 16%, 92%, 0.6);
+  color: var(--dark-color);
+  font-size: 15px;
+  font-weight: bold;
+  transition: border 0.4s;
+  outline: none;
+}
+
+.login-inputs:focus,
+.login-input:valid {
+  border: 1px solid var(--dark-color);
+}
+
+.login-input:focus {
+  transition: all 0.4s ease;
+  box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
+  transform: translateY(-2px) translateX(-2px);
+}
+
+.login-input {
+  padding-right: 36px;
+
+  &.dark {
+    background-color: var(--light-color);
+
+    &:focus {
+      box-shadow: 5px 5px 0px var(--light-color);
+    }
+  }
+}
+
+.login-buttons {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  column-gap: 0.75rem;
+}
+
+.login-button {
+  width: 100%;
+  padding: 14px 2rem;
+  border-radius: 5px;
+  color: var(--dark-color);
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
+    background: var(--dark-color);
+    color: var(--light-color);
+    transform: translateY(-5px) translateX(-5px);
+  }
+
+  &.dark {
+    &:hover {
+      box-shadow: 5px 5px 0px var(--light-color);
+    }
+  }
+
+  a {
+    &.dark {
+      color: var(--light-color);
+
+      &:visited {
+        color: var(--light-color);
+      }
+    }
+  }
+}
+
+.login-button>a {
+  text-decoration: none;
+
+  &:visited {
+    color: var(--dark-color);
+  }
+}
+
+.login-button:hover>a {
+  color: var(--light-color);
+}
+
+.login-button-ghost {
+  display: flex;
+  align-items: center;
+  background: var(--dark-color);
+  color: var(--light-color);
+  box-shadow: none;
+
+  &:hover {
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
+    background: var(--brand-color);
+  }
+}
+
+.login-button-ghost>a {
+  &:visited {
+    color: var(--light-color);
+  }
+}
+
+.login-button-ghost:hover>a {
+  &:visited {
+    color: var(--dark-color);
+  }
+}

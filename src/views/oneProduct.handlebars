@@ -1,0 +1,37 @@
+<nav>
+  <ul class="horizontal-menu">
+    <li><a href="#">MENU</a>
+      <ul class="vertical-menu">
+        <li><a class="nav-link" href="/products">Todos los productos</a></li>
+        <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
+        <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="/products">HOME</a>
+    </li>
+    {{#if user}}
+      <li><a href="/sessions/user">MI PERFIL</a></li>
+      
+    {{else}}
+      <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
+      <li><a href="/sessions/register">REGISTRARSE</a></li>
+    {{/if}}
+  </ul>
+</nav>
+
+
+<div>
+  <h1>{{product.title}}</h1>
+  <p>{{product.description}}</p>
+  <p>Precio: ${{product.price}}</p>
+  <p>Categoria: #{{product.category}}</p>
+  <img src="{{product.thumbnails}}" height="150" />
+  <form action="/carts/{{user.cart}}/products/{{product._id}}" method="post">
+    <input type="submit" value="Agregar al carrito" />
+  </form>
+</div>
+
+<form action="/products/delete/{{product._id}}" method="get">
+  <input type="submit" value="Borrar producto" />
+</form>
