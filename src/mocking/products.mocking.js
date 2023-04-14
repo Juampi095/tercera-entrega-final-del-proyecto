@@ -48,18 +48,28 @@ router.post("/", (req, res) => {
       message: "Error trying to create product",
       code: EErrors.INVALID_TYPES_ERROR,
     });
-  }else if (typeof(stock) !=="number"||stock<0){
+  } else if (typeof stock !== "number" || stock < 0) {
     CustomError.createError({
-        name: "Product creation error",
-        cause: generateStockError(stock),
-        message: "Error trying to create product",
-        code: EErrors.STOCK_ERROR
-    })
+      name: "Product creation error",
+      cause: generateStockError(stock),
+      message: "Error trying to create product",
+      code: EErrors.STOCK_ERROR,
+    });
   }
 
-  const product = {id,title,description,code,price,stock,status,category,thumbnails}
-  product.push(product)
-    res.json({status:"success",payload:product})
+  const product = {
+    id,
+    title,
+    description,
+    code,
+    price,
+    stock,
+    status,
+    category,
+    thumbnails,
+  };
+  product.push(product);
+  res.json({ status: "success", payload: product });
 });
 
-export default router
+export default router;

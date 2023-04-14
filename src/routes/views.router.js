@@ -21,7 +21,7 @@ import {
   githubLogin,
   deleteCartProducts,
   purchase,
-} from "../controllers/views.controller.js";
+} from "../controllers/views.controllers.js";
 import { viewsPassportCall, viewsAuthorization } from "../middleware/auth.js";
 
 const router = Router();
