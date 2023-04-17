@@ -29,23 +29,38 @@ class FileManager {
 
   getOneByParam = async (param, value) => {
     const data = await this.read();
-    const obj = data.find(d => d[param] == value);
-    
-    return obj;
-};
+    const obj = data.find((d) => d[param] == value);
 
-    create = async (obj) => {
-        const list = await this.read()
-        for (let i= 0; i  < list.length; i++){
-            if (list[i].id==id){
-                list[i]=obj
-                break
-            }
-        }
-        await this.write(list)
-        return obj
-    
+    return obj;
+  };
+
+  create = async (obj) => {
+    const list = await this.read();
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].id == id) {
+        list[i] = obj;
+        break;
+      }
     }
+    await this.write(list);
+    return obj;
+  };
+
+  update = async (id, obj) => {
+    obj.id = id;
+    const list = await this.read();
+
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].id == id) {
+        list[i] = obj;
+        break;
+      }
+    }
+
+    await this.write(list);
+
+    return obj;
+  };
 }
 
 export default FileManager;

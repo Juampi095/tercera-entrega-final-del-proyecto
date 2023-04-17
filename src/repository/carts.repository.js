@@ -1,5 +1,11 @@
 import CartDTO from "../dao/DTO/cart.dto.js";
-import { productsService, ticketsService } from "../repository/index.js";
+import { productsService, ticketsService } from "./index.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
+import {
+  generateNullError,
+  generatePurchaseError,
+} from "../services/errors/info.js";
 
 export default class CartRepository {
   constructor(dao) {
@@ -20,8 +26,20 @@ export default class CartRepository {
   };
 
   addProductToCart = async (cart, product) => {
-    if (!cart) throw new Error("No se ha encontrado el carrito...");
-    if (!product) throw new Error("No se ha encontrado el producto...");
+    if (!cart)
+      CustomError.createError({
+        name: "Find cart error",
+        cause: generateNullError("Cart"),
+        message: "Error trying to find a cart",
+        code: EErrors.NULL_ERROR,
+      });
+    if (!product)
+      CustomError.createError({
+        name: "Find product error",
+        cause: generateNullError("Product"),
+        message: "Error trying to find a product",
+        code: EErrors.NULL_ERROR,
+      });
 
     const productIndex = cart.products.findIndex((p) =>
       p.product?.equals(product._id)
@@ -41,7 +59,14 @@ export default class CartRepository {
 
   purchase = async (cid, purchaser) => {
     const cart = await this.getCart(cid);
-    if (cart.products.length === 0) throw new Error("El carrito está vacío...");
+    if (cart.products.length === 0)
+      CustomError.createError({
+        name: "Purchase error",
+        cause: generatePurchaseError(cid),
+        message: "Error trying to purchase. Cart cannot be empty.",
+        code: EErrors.PURCHASE_ERROR,
+      });
+
     const cartProducts = await Promise.all(
       cart.products.map(async (product) => {
         const newObj = await productsService.getProduct(

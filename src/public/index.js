@@ -16,7 +16,8 @@ toggle.addEventListener("click", () => {
 });
 
 if (localStorage.getItem("dark-mode") === "true") {
-  document.body.classList.add("dark");
+  body.classList.toggle("dark");
+  loginContainer.classList.toggle("dark");
 } else {
   document.body.classList.remove("dark");
 }

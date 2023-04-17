@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { generateProducts } from "../../utils.js";
-import CustomError from "../services/errors/CustomError.js";
-import EErrors from "../services/errors/enums.js";
+import { generateProducts } from "../../../../utils.js";
+import CustomError from "../../../services/errors/CustomError.js";
+import EErrors from "../../../services/errors/enums.js";
 import {
   generatePropertyError,
   generateDuplicatedError,
   generateStockError,
-} from "../services/errors/info.js";
+} from "../../../services/errors/info";
 
 const router = Router();
 const products = [];
@@ -15,7 +15,6 @@ router.get("/", (req, res) => {
   for (let i = 0; i < 100; i++) {
     products.push(generateProducts());
   }
-
   res.json({ status: "success", payload: products });
 });
 
@@ -31,9 +30,10 @@ router.post("/", (req, res) => {
     category,
     thumbnails,
   } = req.body;
+
   const duplicated = products.find((p) => p.code === code);
   if (
-    !title ||
+    !!title ||
     !code ||
     !price ||
     !stock ||
@@ -75,7 +75,7 @@ router.post("/", (req, res) => {
     category,
     thumbnails,
   };
-  products.push(product);
+  product.push(product);
   res.json({ status: "success", payload: product });
 });
 
