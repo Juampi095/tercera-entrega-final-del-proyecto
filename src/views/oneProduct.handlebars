@@ -11,11 +11,11 @@
       <a href="/products">HOME</a>
     </li>
     {{#if user}}
-    <li><a href="/sessions/user">MI PERFIL</a></li>
-    {{!-- <li><a href="/carts/{{user.cart}}"></a></li> --}}
+      <li><a href="/sessions/user">MI PERFIL</a></li>
+      {{!-- <li><a href="/carts/{{user.cart}}"></a></li> --}}
     {{else}}
-    <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
-    <li><a href="/sessions/register">REGISTRARSE</a></li>
+      <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
+      <li><a href="/sessions/register">REGISTRARSE</a></li>
     {{/if}}
   </ul>
 </nav>
@@ -31,10 +31,19 @@
         <p class="product-description">{{product.description}}</p>
         <p class="product-price">Precio: ${{product.price}}</p>
         <p class="product-category">Categoria: #{{product.category}}</p>
-        <form action="/carts/{{user.cart}}/products/{{product._id}}" method="post">
-          <input class="add-to-cart-button" type="submit" value="Agregar al carrito" />
+        <form
+          action="/carts/{{user.cart}}/products/{{product._id}}"
+          method="post"
+        >
+          <input
+            class="add-to-cart-button"
+            type="submit"
+            value="Agregar al carrito"
+          />
         </form>
-        
+        {{!-- <form action="/products/delete/{{product._id}}" method="get">
+          <input class="add-to-cart-button" type="submit" value="Borrar producto" />
+        </form> --}}
       </div>
     </div>
 
