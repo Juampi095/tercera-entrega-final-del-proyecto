@@ -1,12 +1,20 @@
-</li>
+<nav>
+  <ul class="horizontal-menu">
+    <li><a href="#">MENU</a>
+      <ul class="vertical-menu">
+        <li><a class="nav-link" href="/products">Todos los productos</a></li>
+        <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
+        <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
+      </ul>
+    </li>
     <li>
       <a href="/products">HOME</a>
     </li>
     {{#if user}}
-    <li><a href="/sessions/user">MI PERFIL</a></li>
+      <li><a href="/sessions/user">MI PERFIL</a></li>
     {{else}}
-    <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
-    <li><a href="/sessions/register">REGISTRARSE</a></li>
+      <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
+      <li><a href="/sessions/register">REGISTRARSE</a></li>
     {{/if}}
   </ul>
 </nav>
@@ -14,17 +22,17 @@
   <h2>Carrito</h2>
   <div>
     {{#each products.products}}
-    {{#if this.product}}
-    <div>
-      <div>
-        <img src={{this.product.thumbnails}} alt={{this.product.title}} />
-      </div>
-      <div>
-        <h2>{{this.product.title}}</h2>
-        <h4>${{this.product.price}}</h4>
-      </div>
-    </div>
-    {{/if}}
+      {{#if this.product}}
+        <div>
+          <div>
+            <img src={{this.product.thumbnails}} alt={{this.product.title}} />
+          </div>
+          <div>
+            <h2>{{this.product.title}}</h2>
+            <h4>${{this.product.price}}</h4>
+          </div>
+        </div>
+      {{/if}}
     {{/each}}
   </div>
   <form action="/carts/{{cid}}/purchase" method="post">
@@ -33,4 +41,5 @@
   <form action="/carts/{{cid}}" method="post">
     <button type="submit">Vaciar carrito</button>
   </form>
+
 </section>

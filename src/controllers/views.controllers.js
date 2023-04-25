@@ -1,4 +1,15 @@
-import { cartsService, productsService } from "../repository/index.js";
+import {
+  cartsService,
+  productsService,
+  usersService,
+} from "../repository/index.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
+import {
+  createHash,
+  validateToken,
+  isValidPassword as comparePasswords,
+} from "../../utils.js";
 
 ///////////////////////// REDIRECT PARA LOGIN
 
@@ -33,11 +44,8 @@ export const getProducts = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error,
-    });
+    req.logger.error(error.toString());
+    res.render("errors/default", { error });
   }
 };
 
@@ -54,16 +62,17 @@ export const renderForm = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const product = req.body;
-    const newProduct = await productsService.createProduct(product);
+    const { role, id } = req.user;
+    const data = req.body;
 
-    res.redirect("/products/" + newProduct._id);
+    if (role === "premium") data.owner = id;
+
+    const product = await productsService.createProduct(data);
+
+    res.redirect("/products/" + product._id);
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error,
-    });
+    req.logger.error(error.toString());
+    res.render("errors/default", { error });
   }
 };
 
@@ -80,11 +89,8 @@ export const getProduct = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error,
-    });
+    req.logger.error(error.toString());
+    res.render("errors/default", { error });
   }
 };
 
@@ -93,17 +99,20 @@ export const getProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const pid = req.params.pid;
-    await productsService.deleteProduct({
-      id,
-    });
+    const user = req.user;
+    const product = await productsService.getProduct(pid);
 
+    if (user.role === "premium" && user.id !== product.owner) {
+      const error = "You can't modify a product owned by another user";
+      req.logger.error(error);
+      return res.status(403).json({ status: "error", error });
+    }
+
+    await productsService.deleteProduct(pid);
     res.redirect("/products");
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error,
-    });
+    req.logger.error(error.toString());
+    res.render("errors/default", { error });
   }
 };
 
@@ -123,11 +132,8 @@ export const getCartProducts = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "error",
-      error,
-    });
+    req.logger.error(error.toString());
+    res.render("errors/default", { error });
   }
 };
 
@@ -137,30 +143,38 @@ export const addToCart = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
+    const user = req.user;
 
     const cart = await cartsService.getCart(cid);
     if (!cart)
-      return res.send({
-        status: "ERROR",
-        error: "No se ha encontrado el carrito especificado...",
+      CustomError.createError({
+        name: "Cart error",
+        cause: generateNullError("Cart"),
+        message: "Error trying to find cart",
+        code: EErrors.NULL_ERROR,
       });
 
     const product = await productsService.getProduct(pid);
     if (!product)
-      return res.send({
-        status: "ERROR",
-        error: "No se ha encontrado el producto especificado...",
+      CustomError.createError({
+        name: "Product error",
+        cause: generateNullError("Product"),
+        message: "Error trying to find product",
+        code: EErrors.NULL_ERROR,
       });
+
+    if (user.role === "premium" && cart.owner === user.id) {
+      const error = "You can't add your own product to your cart.";
+      req.logger.error(error);
+      return res.status(403).json({ status: "error", error });
+    }
 
     cartsService.addProductToCart(cart, product);
 
     res.redirect("/carts/" + cid);
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error,
-    });
+    req.logger.error(error.toString());
+    res.render("errors/default", { error });
   }
 };
 
@@ -179,11 +193,8 @@ export const deleteCartProducts = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error,
-    });
+    req.logger.error(error.toString());
+    res.render("errors/default", { error });
   }
 };
 
@@ -208,11 +219,8 @@ export const purchase = async (req, res) => {
       ticket,
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error,
-    });
+    req.logger.error(error.toString());
+    res.render("errors/default", { error });
   }
 };
 
@@ -223,11 +231,8 @@ export const filterByCategory = async (req, res) => {
     const category = req.body.category;
     res.redirect(`/products?category=${category}`);
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error,
-    });
+    req.logger.error(error.toString());
+    res.render("errors/default", { error });
   }
 };
 
@@ -264,12 +269,13 @@ export const renderLogin = (req, res) => {
 export const login = async (req, res) => {
   const user = req.user;
 
-  if (!user) {
-    return res.status(400).json({
-      status: "error",
-      error: "Invalid credentials",
+  if (!user)
+    CustomError.createError({
+      name: "Authentication error",
+      cause: generateAuthenticationError(),
+      message: "Error trying to find user.",
+      code: EErrors.AUTHENTICATION_ERROR,
     });
-  }
 
   res.cookie("cookieToken", user.token).redirect("/products");
 };
@@ -308,4 +314,67 @@ export const getUser = (req, res) => {
 
 export const githubLogin = async (req, res) => {
   return res.cookie("cookieToken", req.user.token).redirect("/products");
+};
+
+/////////////////////////RENDER ENVIAR EMAIL
+
+export const renderForgotPassword = async (req, res) => {
+  res.render("sessions/forgotPassword");
+};
+
+export const sendRecoveryMail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    await usersService.sendMail(email);
+    res.render("sessions/message", {
+      message: `Enviamos un email al correo ${email}. Ingresá al link para restablecer la contraseña.`,
+    });
+  } catch (error) {
+    req.logger.error(error.toString());
+    res.render("base", { error });
+  }
+};
+
+export const renderChangePassword = async (req, res) => {
+  const { uid, token } = req.params;
+  res.render("sessions/changePassword", { uid, token });
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const { uid, token } = req.params;
+    const { newPassword, confirmation } = req.body;
+    const { err } = validateToken(token);
+    const user = await usersService.getUserByID(uid);
+
+    if (err?.name === "TokenExpiredError")
+      return res.status(403).redirect("/sessions/password_reset");
+    else if (err) return res.render("errors/base", { error: err });
+
+    if (!newPassword || !confirmation)
+      return res.render("errors/base", {
+        error: "Escriba y confirme la nueva contraseña",
+      });
+    if (comparePasswords(user, newPassword))
+      return res.render("errors/base", {
+        error: "La contraseña no puede ser igual a la anterior.",
+      });
+    if (newPassword != confirmation)
+      return res.render("errors/base", {
+        error: "Las contraseñas no coinciden.",
+      });
+
+    const userData = {
+      ...user,
+      password: createHash(newPassword),
+    };
+
+    const newUser = await usersService.updateUser(uid, userData);
+    res.render("sessions/message", {
+      message: "Tu contraseña ha sido actualizada. Ya podés iniciar sesión.",
+    });
+  } catch (error) {
+    req.logger.error(error.toString());
+    res.render("base", { error });
+  }
 };

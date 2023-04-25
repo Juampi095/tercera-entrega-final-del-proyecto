@@ -6,7 +6,7 @@ import {
   generatePropertyError,
   generateDuplicatedError,
   generateStockError,
-} from "../../../services/errors/info";
+} from "../../../services/errors/info.js";
 
 const router = Router();
 const products = [];
@@ -15,6 +15,7 @@ router.get("/", (req, res) => {
   for (let i = 0; i < 100; i++) {
     products.push(generateProducts());
   }
+
   res.json({ status: "success", payload: products });
 });
 
@@ -30,10 +31,9 @@ router.post("/", (req, res) => {
     category,
     thumbnails,
   } = req.body;
-
   const duplicated = products.find((p) => p.code === code);
   if (
-    !!title ||
+    !title ||
     !code ||
     !price ||
     !stock ||
@@ -46,7 +46,7 @@ router.post("/", (req, res) => {
       name: "Product creation error",
       cause: generatePropertyError({ title, code, price, stock }),
       message: "Error trying to create product",
-      code: EErrors.INVALID_TYPE_ERROR,
+      code: EErrors.INVALID_TYPES_ERROR,
     });
   } else if (duplicated) {
     CustomError.createError({
@@ -75,7 +75,7 @@ router.post("/", (req, res) => {
     category,
     thumbnails,
   };
-  product.push(product);
+  products.push(product);
   res.json({ status: "success", payload: product });
 });
 

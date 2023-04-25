@@ -13,17 +13,24 @@ const __dirname = dirname(__filename);
 export default __dirname;
 
 //GEN/AUTH TOKEN
-export const generateToken = (user) => {
+export const generateToken = (user, time = 24) => {
   const token = jwt.sign(
     {
       user,
     },
     PRIVATE_KEY,
     {
-      expiresIn: "24h",
+      expiresIn: `${time}h`,
     }
   );
   return token;
+};
+
+//VALID TOKEN
+export const validateToken = (token) => {
+  return jwt.verify(token, PRIVATE_KEY, function (err, decoded) {
+    return { err, decoded };
+  });
 };
 
 //CODE GEN

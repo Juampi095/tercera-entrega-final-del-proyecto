@@ -46,7 +46,7 @@ router.post("/", (req, res) => {
       name: "Product creation error",
       cause: generatePropertyError({ title, code, price, stock }),
       message: "Error trying to create product",
-      code: EErrors.INVALID_TYPE_ERROR,
+      code: EErrors.INVALID_TYPES_ERROR,
     });
   } else if (duplicated) {
     CustomError.createError({

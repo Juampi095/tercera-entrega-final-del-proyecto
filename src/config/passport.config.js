@@ -6,6 +6,7 @@ import { createHash, isValidPassword, generateToken } from "../../utils.js";
 import config from "./config.js";
 import { cartsService, usersService } from "../repository/index.js";
 import UserDTO from "../dao/DTO/user.dto.js";
+import CustomError from "../services/errors/CustomError.js";
 
 const {
   PRIVATE_KEY,
@@ -41,13 +42,13 @@ const initPassport = () => {
           if (!first_name || !last_name || !email || !age || !password)
             return res.status(400).json({
               status: "error",
-              error: "Todos los campos deben completarse",
+              error: "Todos los campos deben ser rellenados",
             });
 
           const user = await usersService.getUserByEmail(username);
 
           if (user) {
-            console.log("User already exists");
+            req.logger.info("User already exists");
             return done(null, false);
           }
 
@@ -67,6 +68,7 @@ const initPassport = () => {
 
           return done(null, result);
         } catch (error) {
+          req.logger.error(error.toString());
           return done("[LOCAL] Error al crear usuario " + error);
         }
       }
@@ -101,7 +103,12 @@ const initPassport = () => {
           const user = await usersService.getUserByEmail(username);
 
           if (!user) {
-            console.log("Usuario no encontrado");
+            CustomError.createError({
+              name: "Authentication error",
+              cause: generateAuthenticationError(),
+              message: "Error trying to find user.",
+              code: EErrors.AUTHENTICATION_ERROR,
+            });
             return done(null, false);
           }
 
@@ -118,6 +125,7 @@ const initPassport = () => {
       }
     )
   );
+
   passport.use(
     "github",
     new GithubStrategy(
@@ -129,6 +137,7 @@ const initPassport = () => {
       async (accessToken, refreshToken, profile, done) => {
         try {
           const user = await usersService.getUserByEmail(profile._json.email);
+
           if (!user) {
             const newUser = {
               first_name: profile._json.name,
@@ -145,10 +154,13 @@ const initPassport = () => {
 
             const token = generateToken(result);
             result.token = token;
+
             return done(null, result);
           }
+
           const token = generateToken(user);
           user.token = token;
+
           done(null, user);
         } catch (error) {
           return done(error);
@@ -167,7 +179,7 @@ passport.use(
     },
     async (jwt_payload, done) => {
       try {
-        const user = new userDTO(jwt_payload.user);
+        const user = new UserDTO(jwt_payload.user);
         return done(null, user);
       } catch (error) {
         return done(error);
@@ -180,7 +192,7 @@ passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 passport.deserializeUser(async (id, done) => {
-  const user = await usersService.getUserById(id);
+  const user = await usersService.getUserDataByID(id);
   done(null, user);
 });
 
