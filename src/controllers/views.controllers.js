@@ -9,7 +9,7 @@ import {
   createHash,
   validateToken,
   isValidPassword as comparePasswords,
-} from "../../utils.js";
+} from "../utils.js";
 
 ///////////////////////// REDIRECT PARA LOGIN
 
@@ -331,50 +331,11 @@ export const sendRecoveryMail = async (req, res) => {
     });
   } catch (error) {
     req.logger.error(error.toString());
-    res.render("base", { error });
+    res.render("errors/default", { error });
   }
 };
 
 export const renderChangePassword = async (req, res) => {
   const { uid, token } = req.params;
   res.render("sessions/changePassword", { uid, token });
-};
-
-export const changePassword = async (req, res) => {
-  try {
-    const { uid, token } = req.params;
-    const { newPassword, confirmation } = req.body;
-    const { err } = validateToken(token);
-    const user = await usersService.getUserByID(uid);
-
-    if (err?.name === "TokenExpiredError")
-      return res.status(403).redirect("/sessions/password_reset");
-    else if (err) return res.render("errors/base", { error: err });
-
-    if (!newPassword || !confirmation)
-      return res.render("errors/base", {
-        error: "Escriba y confirme la nueva contraseña",
-      });
-    if (comparePasswords(user, newPassword))
-      return res.render("errors/base", {
-        error: "La contraseña no puede ser igual a la anterior.",
-      });
-    if (newPassword != confirmation)
-      return res.render("errors/base", {
-        error: "Las contraseñas no coinciden.",
-      });
-
-    const userData = {
-      ...user,
-      password: createHash(newPassword),
-    };
-
-    const newUser = await usersService.updateUser(uid, userData);
-    res.render("sessions/message", {
-      message: "Tu contraseña ha sido actualizada. Ya podés iniciar sesión.",
-    });
-  } catch (error) {
-    req.logger.error(error.toString());
-    res.render("base", { error });
-  }
 };

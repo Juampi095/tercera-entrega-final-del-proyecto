@@ -16,6 +16,12 @@ import viewsRouter from "./routes/views.router.js";
 import sessionRouter from "./routes/sessions.router.js";
 import { createMessage } from "./controllers/chat.controller.js";
 import http from "http";
+import mockingProducts from "./routes/testing/mocking/products.mocking.js";
+import errorHandler from "./middleware/errors/index.js";
+import { logger, addLogger } from "./middleware/logger.js";
+import loggerRouter from "./routes/logger.router.js";
+import { serve, setup } from "swagger-ui-express";
+import specs from "./config/swagger.config.js";
 
 const { SESSION_SECRET, COOKIE_SECRET, MONGO_URI, DB_NAME } = config;
 
@@ -47,6 +53,7 @@ app.use(
 initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(addLogger);
 
 //RUTAS
 app.use("/", viewsRouter);
@@ -54,13 +61,22 @@ app.use("/api/products", productsRouter);
 app.use(
   "/api/carts",
   passportCall("current"),
-  authorization("user"),
+  authorization(["user", "premium"]),
   cartsRouter
 );
-app.use("/chat", passportCall("current"), authorization("user"), chatRouter);
+app.use(
+  "/chat",
+  passportCall("current"),
+  authorization(["user", "premium"]),
+  chatRouter
+);
 app.use("/api/sessions", sessionRouter);
+app.use("/mockingproducts", mockingProducts);
+app.use(errorHandler);
+app.use("/loggertest", loggerRouter);
+app.use("/apidocs", serve, setup(specs));
 
-//
+// MONGO
 mongoose.set("strictQuery", false);
 mongoose.connect(
   MONGO_URI,
@@ -69,13 +85,13 @@ mongoose.connect(
   },
   (error) => {
     if (error) {
-      console.log("Can't connect to the DB");
+      logger.error("Can't connect to the DB");
       return;
     }
 
-    console.log("DB connected");
-    server.listen(port, () => console.log(`Listening on port ${port}`));
-    server.on("error", (e) => console.log(e));
+    logger.info("DB connected");
+    server.listen(port, () => logger.info(`Listening on port ${port}`));
+    server.on("error", (e) => logger.error(e));
   }
 );
 
