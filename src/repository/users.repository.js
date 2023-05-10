@@ -65,4 +65,14 @@ export default class UsersRepository {
 
     return await this.mail.send(email, "Restauración de contraseña.", html);
   };
+  sendRegistrationMail = async (email) => {
+    const html = `
+    <h1>¡Tu registro en "Coder-eCommerce" ha sido exitoso!</h1>
+    <br>
+    <p>Gracias por registrarte..</p>
+    <br>
+    <p>¡Saludos!👋</p>`;
+
+    return await this.mail.send(email, "Registro exitoso", html);
+  };
 }

@@ -51,5 +51,10 @@ router.put(
   authorization(["user", "premium"]),
   updateRole
 );
+//DELETE USER BY EMAIL ✔
+router.delete("/email/:email", deleteUserByEmail);
+
+//DELETE USER BY ID ✔
+router.delete("/:uid", deleteUser);
 
 export default router;
