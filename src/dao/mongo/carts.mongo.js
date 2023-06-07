@@ -1,21 +1,34 @@
-import mongoose from "mongoose";
+import CartModel from "./models/cart.model.js";
+import ProductModel from "./models/product.model.js";
 
-const cartSchema = new mongoose.Schema({
-  products: {
-    type: [
+export default class Cart {
+  constructor() {}
+
+  create = async () => {
+    const cart = await CartModel.create({
+      products: [],
+    });
+    return cart;
+  };
+
+  getById = async (id) => {
+    return await CartModel.findById(id).populate({
+      path: "products.product",
+      model: ProductModel,
+    });
+  };
+
+  update = async (id, data) => {
+    return await CartModel.updateOne(
       {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "products",
-        },
-        quantity: Number,
+        _id: id,
       },
-    ],
-    default: [],
-  },
-});
-
-mongoose.set("strictQuery", false);
-const CartModel = mongoose.model("carts", cartSchema);
-
-export default CartModel;
+      {
+        $set: {
+          products: data.products,
+          quantity: data.quantity,
+        },
+      }
+    );
+  };
+}

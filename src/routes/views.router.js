@@ -21,10 +21,16 @@ import {
   githubLogin,
   deleteCartProducts,
   purchase,
+  renderForgotPassword,
+  sendRecoveryMail,
+  renderChangePassword,
 } from "../controllers/views.controller.js";
-import { viewsPassportCall, viewsAuthorization } from "../middleware/auth.js";
+import { changePassword } from "../controllers/sessions.controller.js";
+import { viewsAuthorization, viewsPassportCall } from "../middleware/auth.js";
+import { uploader } from "../services/multer.js";
 
 const router = Router();
+
 // REDIRECT PARA LOGIN
 router.get("/", redirect);
 
@@ -35,7 +41,7 @@ router.get("/products", viewsPassportCall("current"), getProducts);
 router.get(
   "/products/create",
   viewsPassportCall("current"),
-  viewsAuthorization("admin"),
+  viewsAuthorization(["premium", "admin"]),
   renderForm
 );
 
@@ -43,7 +49,8 @@ router.get(
 router.post(
   "/products",
   viewsPassportCall("current"),
-  viewsAuthorization("admin"),
+  viewsAuthorization(["premium", "admin"]),
+  uploader.array("file", 1),
   addProduct
 );
 
@@ -54,7 +61,7 @@ router.get("/products/:pid", viewsPassportCall("current"), getProduct);
 router.get(
   "/products/delete/:pid",
   viewsPassportCall("current"),
-  viewsAuthorization("admin"),
+  viewsAuthorization(["premium", "admin"]),
   deleteProduct
 );
 
@@ -62,7 +69,7 @@ router.get(
 router.get(
   "/carts/:cid",
   viewsPassportCall("current"),
-  viewsAuthorization("user"),
+  viewsAuthorization(["user", "premium"]),
   getCartProducts
 );
 
@@ -70,15 +77,15 @@ router.get(
 router.post(
   "/carts/:cid/products/:pid",
   viewsPassportCall("current"),
-  viewsAuthorization("user"),
+  viewsAuthorization(["user", "premium"]),
   addToCart
 );
 
-//ELIMINAR PRODUCTO DEL CARRITO
+//VACIAR CARRITO
 router.post(
   "/carts/:cid",
   viewsPassportCall("current"),
-  viewsAuthorization("user"),
+  viewsAuthorization(["user", "premium"]),
   deleteCartProducts
 );
 
@@ -93,7 +100,7 @@ router.post(
 router.post(
   "/carts/:cid/purchase",
   viewsPassportCall("current"),
-  viewsAuthorization("user"),
+  viewsAuthorization(["user", "premium"]),
   purchase
 );
 
@@ -131,4 +138,17 @@ router.get(
   }),
   githubLogin
 );
+
+//RENDER FORGOT PASS
+router.get("/sessions/password_reset", renderForgotPassword);
+
+//RECOVERY EMAIL
+router.post("/sessions/password_reset", sendRecoveryMail);
+
+//RENDER CHANGE PASS
+router.get("/sessions/password_reset/:uid/:token", renderChangePassword);
+
+//CAMBIAR PASS
+router.post("/sessions/password_reset/:uid/:token", changePassword);
+
 export default router;

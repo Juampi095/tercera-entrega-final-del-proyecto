@@ -15,11 +15,16 @@ const productSchema = new mongoose.Schema({
   },
   stock: Number,
   category: [String],
-  tumbnails: [String],
+  thumbnails: [String],
+  owner: {
+    type: String,
+    default: "admin",
+  },
 });
 
 productSchema.plugin(mongoosePaginate);
 
+mongoose.set("strictQuery", false);
 const ProductModel = mongoose.model("products", productSchema);
 
 export default ProductModel;

@@ -1,37 +1,132 @@
-<nav>
-  <ul class="horizontal-menu">
-    <li><a href="#">MENU</a>
-      <ul class="vertical-menu">
-        <li><a class="nav-link" href="/products">Todos los productos</a></li>
-        <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
-        <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="/products">HOME</a>
-    </li>
-    {{#if user}}
-      <li><a href="/sessions/user">MI PERFIL</a></li>
-      
-    {{else}}
-      <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
-      <li><a href="/sessions/register">REGISTRARSE</a></li>
-    {{/if}}
-  </ul>
-</nav>
+<header>
+  <div class="top-nav">
+    <p>Free shipping on orders over $99</p>
+    <div>
+      <a href="#">
+        <i class="bx bxl-facebook"></i>
+      </a>
+      <a href="#">
+        <i class="bx bxl-twitter"></i>
+      </a>
+      <a href="#">
+        <i class="bx bxl-instagram"></i>
+      </a>
+      <a class="profile-top-nav" href="/sessions/user">
+        <i class="bx bxs-user"></i>
+      </a>
+    </div>
+  </div>
 
+  <nav>
+    <ul class="horizontal-menu">
+      <li>
+        <input type="checkbox" id="toggle" />
+        <label class="toggle" for="toggle">
+          <i class="bx bxs-sun"></i>
+          <i class="bx bx-moon"></i>
+          <span class="ball"></span>
+        </label>
+      </li>
+      <div>
+        <li><a href="#">MENU</a>
+          <ul class="vertical-menu">
+            <li><a class="nav-link" href="/products">Todos los productos</a></li>
+            <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
+            <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/products">HOME</a>
+        </li>
+        {{#if user}}
+          <li><a href="/sessions/user">PERFIL</a></li>
+          <li><a href="/carts/{{user.cart}}"><i
+                class="bx bxs-cart-alt"
+              ></i></a></li>
+        {{else}}
+          <li><a href="/sessions/login">LOG IN</a></li>
+          <li><a href="/sessions/register">REGISTER</a></li>
+        {{/if}}
+      </div>
+    </ul>
+  </nav>
 
-<div>
-  <h1>{{product.title}}</h1>
-  <p>{{product.description}}</p>
-  <p>Precio: ${{product.price}}</p>
-  <p>Categoria: #{{product.category}}</p>
-  <img src="{{product.thumbnails}}" height="150" />
-  <form action="/carts/{{user.cart}}/products/{{product._id}}" method="post">
-    <input type="submit" value="Agregar al carrito" />
-  </form>
+</header>
+
+<section>
+  <div class="product-card">
+    <div class="product-image">
+      <img src="{{product.thumbnails}}" height="150" />
+    </div>
+    <div class="product-info">
+      <h2 class="product-title">{{product.title}}</h2>
+      <p class="one-product-description">{{product.description}}</p>
+      <p class="product-price">$ {{product.price}}</p>
+      <span class="product-category">#{{product.category}}</span>
+      <form
+        action="/carts/{{user.cart}}/products/{{product._id}}"
+        method="post"
+      >
+        <input
+          class="add-to-cart-button"
+          type="submit"
+          value="Agregar al carrito"
+        />
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="go-top-container">
+  <div class="go-top-button">
+    <i class="bx bx-chevron-up"></i>
+  </div>
 </div>
 
-<form action="/products/delete/{{product._id}}" method="get">
-  <input type="submit" value="Borrar producto" />
-</form>
+<footer>
+  <div class="footer-container">
+    <div class="footer-links">
+      <a href="#">HOME</a>
+      <a href="/products">PRODUCTS</a>
+      <a href="mailto:gastonvigliano@gmail.com">CONTACT</a>
+      <a href="#">ABOUT US</a>
+    </div>
+    <div class="text-divider"></div>
+    <div>
+      <div class="footer-ubi-mail">
+        <div>
+          <i class="bx bxs-location-plus"></i>
+          <p>Calle Lavalle 215, Ciuidad, Mendoza</p>
+        </div>
+        <div>
+          <a href="mailto:azarjpm15@gmail.com"><i
+              class="bx bxs-envelope"
+            ></i></a>
+          <p>azarjpm15@gmail.com</p>
+        </div>
+      </div>
+      <div class="text-divider"></div>
+      <p class="footer-text">
+        Enjoy a seamless shopping experience with our user-friendly interface
+        and dedicated customer support. Embrace the essence of minimalist
+        fashion and create effortlessly sophisticated looks at Minimalist
+        Fashion.</p>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <div>
+    <a href="mailto:azarjpm15@gmail.com">
+      <i class="bx bxs-envelope"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-facebook"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-twitter"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-instagram"></i>
+    </a>
+  </div>
+</div>

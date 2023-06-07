@@ -11,13 +11,23 @@ const userSchema = new mongoose.Schema({
   password: String,
   role: {
     type: String,
-    enum: ["user", "admin"],
+    enum: ["user", "premium", "admin"],
     default: "user",
   },
   cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "carts",
   },
+  documents: {
+    type: [
+      {
+        name: String,
+        reference: String,
+      },
+    ],
+    default: [],
+  },
+  last_connection: String,
 });
 
 mongoose.set("strictQuery", false);

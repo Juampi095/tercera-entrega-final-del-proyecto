@@ -7,6 +7,8 @@ import {
   failLogin,
   logout,
   getUser,
+  sendRecoveryMail,
+  changePassword,
 } from "../controllers/sessions.controller.js";
 import { passportCall } from "../middleware/auth.js";
 
@@ -37,5 +39,8 @@ router.get(
   }),
   async (req, res) => {}
 );
+//PASSWORD RESET ✔
+router.post("/password_reset", sendRecoveryMail);
+router.put("/password_reset/:uid/:token", changePassword);
 
 export default router;

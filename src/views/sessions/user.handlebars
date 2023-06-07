@@ -1,23 +1,37 @@
 <nav>
   <ul class="horizontal-menu">
-    <li><a href="#">MENU</a>
-      <ul class="vertical-menu">
-        <li><a class="nav-link" href="/products">Todos los productos</a></li>
-        <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
-        <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
-      </ul>
-    </li>
     <li>
-      <a href="/products">INICIO</a>
+      <input type="checkbox" id="toggle" />
+      <label class="toggle" for="toggle">
+        <i class="bx bxs-sun"></i>
+        <i class="bx bx-moon"></i>
+        <span class="ball"></span>
+      </label>
     </li>
-    {{#if user}}
-    <li><a href="/sessions/user">MI PERFIL</a></li>
-    {{else}}
-    <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
-    <li><a href="/sessions/register">REGISTRARSE</a></li>
-    {{/if}}
+    <div>
+      <li><a href="#">MENU</a>
+        <ul class="vertical-menu">
+          <li><a class="nav-link" href="/products">Todos los productos</a></li>
+          <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
+          <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="/products">HOME</a>
+      </li>
+      {{#if user}}
+        <li><a href="/sessions/user">PERFIL</a></li>
+        <li><a href="/carts/{{user.cart}}"><i
+              class="bx bxs-cart-alt"
+            ></i></a></li>
+      {{else}}
+        <li><a href="/sessions/login">LOG IN</a></li>
+        <li><a href="/sessions/register">REGISTER</a></li>
+      {{/if}}
+    </div>
   </ul>
 </nav>
+
 <main>
   <section class="user-card-continer">
     <div>
@@ -25,18 +39,70 @@
       <div class="user-card">
         <div class="user-details">
           <div class="user-avatar"></div>
-          Nombre: <h3 class="user-name">{{user.first_name}}</h3>
+          Nombre:
+          <h3 class="user-name">{{user.first_name}}</h3>
           {{#if user.last_name}}
-          Apellido: <h3 class="user-name">{{user.last_name}}</h3>
+            Apellido:
+            <h3 class="user-name">{{user.last_name}}</h3>
           {{/if}}
           <p class="user-email">Email: {{user.email}}</p>
           {{#if user.age}}
-          <p class="user-age">Edad: {{user.age}}</p>
+            <p class="user-age">Edad: {{user.age}}</p>
           {{/if}}
           <p class="user-role">Rol: {{user.role}}</p>
         </div>
-        <button class="login-button"><a href="/sessions/logout">Logout</a></button>
+        <button class="login-button"><a
+            href="/sessions/logout"
+          >Logout</a></button>
       </div>
     </div>
   </section>
 </main>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-links">
+      <a href="#">HOME</a>
+      <a href="/products">PRODUCTS</a>
+      <a href="mailto:gastonvigliano@gmail.com">CONTACT</a>
+      <a href="#">ABOUT US</a>
+    </div>
+    <div class="text-divider"></div>
+    <div>
+      <div class="footer-ubi-mail">
+        <div>
+          <i class="bx bxs-location-plus"></i>
+          <p>Calle Lavalle 215, Ciuidad, Mendoza</p>
+        </div>
+        <div>
+          <a href="mailto:azarjpm15@gmail.com"><i
+              class="bx bxs-envelope"
+            ></i></a>
+          <p>azarjpm15@gmail.com</p>
+        </div>
+      </div>
+      <div class="text-divider"></div>
+      <p class="footer-text">
+        Enjoy a seamless shopping experience with our user-friendly interface
+        and dedicated customer support. Embrace the essence of minimalist
+        fashion and create effortlessly sophisticated looks at Minimalist
+        Fashion.</p>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <div>
+    <a href="mailto:azarjpm15@gmail.com">
+      <i class="bx bxs-envelope"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-facebook"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-twitter"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-instagram"></i>
+    </a>
+  </div>
+</div>
