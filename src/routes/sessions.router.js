@@ -10,7 +10,7 @@ import {
   sendRecoveryMail,
   changePassword,
 } from "../controllers/sessions.controller.js";
-import { passportCall } from "../middleware/auth.js";
+import { passportCall, authorization } from "../middleware/auth.js";
 
 const router = Router();
 //CREAR USERS EN DB ✔

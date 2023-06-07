@@ -12,6 +12,10 @@ export default class UsersRepository {
     this.dao = dao;
     this.mail = new Mail();
   }
+  constructor(dao) {
+    this.dao = dao;
+    this.mail = new Mail();
+  }
 
   getUsers = async () => {
     return await this.dao.get();
@@ -26,6 +30,9 @@ export default class UsersRepository {
     return new UserDTO(user);
   };
 
+  getUserByEmail = async (email) => {
+    return await this.dao.getByEmail(email);
+  };
   getUserByEmail = async (email) => {
     return await this.dao.getByEmail(email);
   };
@@ -111,3 +118,4 @@ export default class UsersRepository {
     return await this.mail.send(email, "Registro exitoso", html);
   };
 }
+

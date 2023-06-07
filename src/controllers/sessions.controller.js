@@ -71,7 +71,15 @@ export const getUser = async (req, res) => {
         cause: generateAuthenticationError(),
         message: "Error trying to find user.",
         code: EErrors.AUTHENTICATION_ERROR,
+
+    if (!user)
+      CustomError.createError({
+        name: "Authentication error",
+        cause: generateAuthenticationError(),
+        message: "Error trying to find user.",
+        code: EErrors.AUTHENTICATION_ERROR,
       });
+
 
     res.json({ status: "success", payload: user });
   } catch (error) {

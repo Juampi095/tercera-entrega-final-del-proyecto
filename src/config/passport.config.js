@@ -2,12 +2,11 @@ import passport from "passport";
 import local from "passport-local";
 import GithubStrategy from "passport-github2";
 import jwt from "passport-jwt";
-import { createHash, isValidPassword, generateToken } from "../utils.js";
+import { createHash, isValidPassword, generateToken } from "../../utils.js";
 import config from "./config.js";
 import { cartsService, usersService } from "../repository/index.js";
 import UserDTO from "../dao/DTO/user.dto.js";
 import CustomError from "../services/errors/CustomError.js";
-import options from "./process.js";
 
 const {
   PRIVATE_KEY,
@@ -45,13 +44,13 @@ const initPassport = () => {
           if (!first_name || !last_name || !email || !age || !password)
             return res.status(400).json({
               status: "error",
-              error: "Todos los campos deben ser completados",
+              error: "Todos los campos deben ser rellenados",
             });
 
           const user = await usersService.getUserByEmail(username);
 
           if (user) {
-            req.logger.error("User already exists");
+            req.logger.info("User already exists");
             return done(null, false);
           }
 
@@ -122,10 +121,9 @@ const initPassport = () => {
 
           const token = generateToken(user);
           user.token = token;
-          user.last_connection = new Date().toLocaleString();
-          await usersService.updateUser(user._id, user);
 
-          return done(null, new UserDTO(user));
+          const newUser = new UserDTO(user);
+          return done(null, newUser);
         } catch (error) {
           return done(error);
         }
@@ -161,16 +159,12 @@ const initPassport = () => {
 
             const token = generateToken(result);
             result.token = token;
-            user.last_connection = new Date().toLocaleString();
-            await usersService.updateUser(user._id, user);
 
             return done(null, result);
           }
 
           const token = generateToken(user);
           user.token = token;
-          user.last_connection = new Date().toLocaleString();
-          await usersService.updateUser(user._id, user);
 
           done(null, user);
         } catch (error) {

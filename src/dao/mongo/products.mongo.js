@@ -9,7 +9,19 @@ export default class Product {
   getPaginate = async (search, options) => {
     return await ProductModel.paginate(search, options);
   };
+export default class Product {
+  constructor() {}
+  get = async () => {
+    return await ProductModel.find();
+  };
 
+  getPaginate = async (search, options) => {
+    return await ProductModel.paginate(search, options);
+  };
+
+  create = async (data) => {
+    return await ProductModel.create(data);
+  };
   create = async (data) => {
     return await ProductModel.create(data);
   };
@@ -26,7 +38,21 @@ export default class Product {
       data
     );
   };
+  update = async (id, data) => {
+    return await ProductModel.updateOne(
+      {
+        _id: id,
+      },
+      data
+    );
+  };
 
+  delete = async (id) => {
+    return await ProductModel.deleteOne({
+      _id: id,
+    });
+  };
+}
   delete = async (id) => {
     return await ProductModel.deleteOne({
       _id: id,

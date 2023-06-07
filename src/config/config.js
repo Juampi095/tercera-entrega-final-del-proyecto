@@ -20,4 +20,8 @@ export default {
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
   GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL,
   PERSISTENCE: process.env.PERSISTENCE,
+  BASE_URL: process.env.BASE_URL,
+  USER_MAIL: process.env.USER_MAIL,
+  USER_PASS: process.env.USER_PASS,
+  TEST_MONGO_URI: process.env.TEST_MONGO_URI,
 };
