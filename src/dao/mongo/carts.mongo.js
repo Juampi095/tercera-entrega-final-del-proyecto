@@ -20,10 +20,7 @@ export default class Cart {
 
   update = async (id, data) => {
     return await CartModel.updateOne(
-  update = async (id, data) => {
-    return await CartModel.updateOne(
       {
-        _id: id,
         _id: id,
       },
       {

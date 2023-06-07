@@ -7,6 +7,9 @@ import {
   updateCart,
   updateQuantity,
   emptyCart,
+  purchase,
+  prepareCheckout,
+  finishCheckout,
 } from "../controllers/carts.controller.js";
 
 const router = Router();
@@ -17,19 +20,26 @@ router.post("/", createCart);
 //MUESTRA EL CARRITO
 router.get("/:cid", getProducts);
 
-//AGREGA UN PROD AL CARRITO
-router.post("/:cid/products/:pid", addProduct);
-
-//ELIMINAR PROD DE CARRO
-router.delete("/:cid/products/:pid", deleteProduct);
-
 //AGREGAR VARIOS PROD AL CARRITO
 router.put("/:cid", updateCart);
+
+//VACIAR CARRO
+router.delete("/:cid", emptyCart);
+
+//AGREGA UN PROD AL CARRITO
+router.post("/:cid/products/:pid", addProduct);
 
 //MODIFICAR LA CANTIDAD DE LOS PROD DEL CARRITO
 router.put("/:cid/products/:pid", updateQuantity);
 
-//VACIAR CARRO
-router.delete("/:cid", emptyCart);
+//ELIMINAR PROD DE CARRO
+router.delete("/:cid/products/:pid", deleteProduct);
+
+//COMPRAR
+router.post("/:cid/purchase", purchase);
+
+//CHECKOUT
+router.post("/:cid/checkout", prepareCheckout);
+router.post("/:cid/finish_checkout", finishCheckout);
 
 export default router;

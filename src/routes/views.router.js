@@ -42,7 +42,6 @@ router.get(
   "/products/create",
   viewsPassportCall("current"),
   viewsAuthorization(["premium", "admin"]),
-  viewsAuthorization(["premium", "admin"]),
   renderForm
 );
 
@@ -63,7 +62,6 @@ router.get(
   "/products/delete/:pid",
   viewsPassportCall("current"),
   viewsAuthorization(["premium", "admin"]),
-  viewsAuthorization(["premium", "admin"]),
   deleteProduct
 );
 
@@ -71,7 +69,6 @@ router.get(
 router.get(
   "/carts/:cid",
   viewsPassportCall("current"),
-  viewsAuthorization(["user", "premium"]),
   viewsAuthorization(["user", "premium"]),
   getCartProducts
 );
@@ -81,7 +78,6 @@ router.post(
   "/carts/:cid/products/:pid",
   viewsPassportCall("current"),
   viewsAuthorization(["user", "premium"]),
-  viewsAuthorization(["user", "premium"]),
   addToCart
 );
 
@@ -89,7 +85,6 @@ router.post(
 router.post(
   "/carts/:cid",
   viewsPassportCall("current"),
-  viewsAuthorization(["user", "premium"]),
   viewsAuthorization(["user", "premium"]),
   deleteCartProducts
 );
@@ -105,7 +100,6 @@ router.post(
 router.post(
   "/carts/:cid/purchase",
   viewsPassportCall("current"),
-  viewsAuthorization(["user", "premium"]),
   viewsAuthorization(["user", "premium"]),
   purchase
 );
@@ -144,18 +138,6 @@ router.get(
   }),
   githubLogin
 );
-
-//RENDER FORGOT PASS
-router.get("/sessions/password_reset", renderForgotPassword);
-
-//RECOVERY EMAIL
-router.post("/sessions/password_reset", sendRecoveryMail);
-
-//RENDER CHANGE PASS
-router.get("/sessions/password_reset/:uid/:token", renderChangePassword);
-
-//CAMBIAR PASS
-router.post("/sessions/password_reset/:uid/:token", changePassword);
 
 //RENDER FORGOT PASS
 router.get("/sessions/password_reset", renderForgotPassword);

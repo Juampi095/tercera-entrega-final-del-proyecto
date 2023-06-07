@@ -3,16 +3,12 @@ import ProductModel from "../dao/mongo/models/product.model.js";
 import { cartsService, productsService } from "../repository/index.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
-import { cartsService, productsService } from "../repository/index.js";
-import CustomError from "../services/errors/CustomError.js";
-import EErrors from "../services/errors/enums.js";
 import {
   generateNullError,
   generateAuthorizationError,
 } from "../services/errors/info.js";
 import mercadopago from "mercadopago";
 
-/////////////////////////CREA UN NUEVO CARRITO
 /////////////////////////CREA UN NUEVO CARRITO
 
 export const createCart = async (req, res) => {
@@ -24,7 +20,6 @@ export const createCart = async (req, res) => {
     });
   } catch (error) {
     req.logger.error(error.toString());
-    req.logger.error(error.toString());
     res.json({
       result: "error",
       error,
@@ -32,7 +27,6 @@ export const createCart = async (req, res) => {
   }
 };
 
-/////////////////////////MUESTRA EL CARRITO
 /////////////////////////MUESTRA EL CARRITO
 
 export const getProducts = async (req, res) => {
@@ -48,22 +42,11 @@ export const getProducts = async (req, res) => {
         code: EErrors.AUTHORIZATION_ERROR,
       });
     const cart = await cartsService.getCart(cid);
-    const userCart = req.user.cart.toString();
-
-    if (cid !== userCart)
-      CustomError.createError({
-        name: "Authorization error",
-        cause: generateAuthorizationError(),
-        message: "Solo tienes acceso a tu propio carrito.",
-        code: EErrors.AUTHORIZATION_ERROR,
-      });
-    const cart = await cartsService.getCart(cid);
     res.json({
       result: "success",
       payload: cart,
     });
   } catch (error) {
-    req.logger.error(error.toString());
     req.logger.error(error.toString());
     res.json({
       result: "error",
@@ -72,7 +55,6 @@ export const getProducts = async (req, res) => {
   }
 };
 
-/////////////////////////AGREGA UN PROD AL CARRITO
 /////////////////////////AGREGA UN PROD AL CARRITO
 
 export const addProduct = async (req, res) => {
@@ -105,7 +87,6 @@ export const addProduct = async (req, res) => {
       payload: updatedCart,
     });
   } catch (error) {
-    req.logger.error(error.toString());
     req.logger.error(error.toString());
     res.json({
       result: "error",
@@ -142,19 +123,9 @@ export const deleteProduct = async (req, res) => {
         cause: generateNullError("Cart"),
         message: "Error al intentar encontrar el carrito.",
         code: EErrors.NULL_ERROR,
-      CustomError.createError({
-        name: "Cart error",
-        cause: generateNullError("Cart"),
-        message: "Error al intentar encontrar el carrito.",
-        code: EErrors.NULL_ERROR,
       });
 
     if (!product)
-      CustomError.createError({
-        name: "Product error",
-        cause: generateNullError("Product"),
-        message: "Error al intentar encontrar el producto.",
-        code: EErrors.NULL_ERROR,
       CustomError.createError({
         name: "Product error",
         cause: generateNullError("Product"),
@@ -178,7 +149,6 @@ export const deleteProduct = async (req, res) => {
       payload: updatedCart,
     });
   } catch (error) {
-    req.logger.error(error.toString());
     req.logger.error(error.toString());
     res.json({
       result: "error",
@@ -217,7 +187,6 @@ export const updateCart = async (req, res) => {
 
     const cart = await cartsService.updateCart(cid, {
       products,
-      products,
     });
 
     res.json({
@@ -225,7 +194,6 @@ export const updateCart = async (req, res) => {
       payload: cart,
     });
   } catch (error) {
-    req.logger.error(error.toString());
     req.logger.error(error.toString());
     res.json({
       result: "error",
@@ -259,19 +227,9 @@ export const updateQuantity = async (req, res) => {
         cause: generateNullError("Cart"),
         message: "Error al intentar encontrar el carrito.",
         code: EErrors.NULL_ERROR,
-      CustomError.createError({
-        name: "Find cart error",
-        cause: generateNullError("Cart"),
-        message: "Error al intentar encontrar el carrito.",
-        code: EErrors.NULL_ERROR,
       });
 
     if (!product)
-      CustomError.createError({
-        name: "Find product error",
-        cause: generateNullError("Product"),
-        message: "Error al intentar encontrar el producto.",
-        code: EErrors.NULL_ERROR,
       CustomError.createError({
         name: "Find product error",
         cause: generateNullError("Product"),
@@ -291,7 +249,6 @@ export const updateQuantity = async (req, res) => {
       payload: updatedCart,
     });
   } catch (error) {
-    req.logger.error(error.toString());
     req.logger.error(error.toString());
     res.json({
       result: "error",
@@ -317,7 +274,6 @@ export const emptyCart = async (req, res) => {
 
     const cart = await cartsService.updateCart(cid, {
       products: [],
-      products: [],
     });
 
     res.json({
@@ -325,7 +281,6 @@ export const emptyCart = async (req, res) => {
       payload: cart,
     });
   } catch (error) {
-    req.logger.error(error.toString());
     req.logger.error(error.toString());
     res.json({
       result: "error",
@@ -353,7 +308,6 @@ export const purchase = async (req, res) => {
       payload: ticket,
     });
   } catch (error) {
-    req.logger.error(error.toString());
     req.logger.error(error.toString());
     res.json({
       result: "error",

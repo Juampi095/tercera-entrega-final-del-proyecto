@@ -33,10 +33,7 @@ class FileManager {
     const data = await this.read();
     const obj = data.find((d) => d[param] == value);
 
-    const obj = data.find((d) => d[param] == value);
-
     return obj;
-  };
   };
 
   create = async (obj) => {

@@ -71,15 +71,7 @@ export const getUser = async (req, res) => {
         cause: generateAuthenticationError(),
         message: "Error trying to find user.",
         code: EErrors.AUTHENTICATION_ERROR,
-
-    if (!user)
-      CustomError.createError({
-        name: "Authentication error",
-        cause: generateAuthenticationError(),
-        message: "Error trying to find user.",
-        code: EErrors.AUTHENTICATION_ERROR,
       });
-
 
     res.json({ status: "success", payload: user });
   } catch (error) {
@@ -88,7 +80,7 @@ export const getUser = async (req, res) => {
   }
 };
 
-/////////////////////////ENVIAR CORREO DE RECUPz
+/////////////////////////ENVIAR CORREO DE RECU
 
 export const sendRecoveryMail = async (req, res) => {
   try {

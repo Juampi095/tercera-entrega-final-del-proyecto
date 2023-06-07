@@ -47,25 +47,8 @@ export default class CartRepository {
         message: "Error trying to find a product",
         code: EErrors.NULL_ERROR,
       });
-    if (!product) {
-      CustomError.createError({
-        name: "Find product error",
-        cause: generateNullError("Product"),
-        message: "Error trying to find a product",
-        code: EErrors.NULL_ERROR,
-      });
     }
 
-    const userID = user.id.toString();
-    const owner = product.owner?.toString();
-
-    if (user.role === "premium" && owner === userID) {
-      CustomError.createError({
-        name: "Authorization error",
-        cause: generateAuthorizationError(),
-        message: "You can't add your own product to your cart.",
-        code: EErrors.AUTHORIZATION_ERROR,
-      });
     const userID = user.id.toString();
     const owner = product.owner?.toString();
 
@@ -258,4 +241,3 @@ export default class CartRepository {
     }
   };
 }
-
